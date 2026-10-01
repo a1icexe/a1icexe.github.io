@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>try{document.documentElement.dataset.theme=localStorage.getItem('vanishot_theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+    <title data-i18n="appTitle">Vanishot - Self-Destructing Image Sharing</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect x='10' y='10' width='80' height='80' rx='18' fill='%23c75b39'/><path d='M50 28 L62 28 L66 36 L76 36 L76 64 L24 64 L24 36 L34 36 L38 28 L50 28 Z M40 52 A10 10 0 1 0 60 52 A10 10 0 1 0 40 52 Z' fill='%23ffffff'/></svg>">
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="lang-selector">
+        <button class="lang-btn theme-btn" id="themeBtn" title="Switch to dark mode" aria-label="Toggle dark mode">Dark</button>
+        <button class="lang-btn" id="langBtn" title="Select Language">&#127760; EN</button>
+        <div class="lang-dropdown hidden" id="langDropdown"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                    </div>
+                <h1>Vanishot</h1>
+            </div>
+            <p class="tagline" data-i18n="tagline">Upload it. Share it. Watch it disappear.</p>
+        </header>
+
+        <main class="upload-section">
+            <form id="uploadForm" class="upload-form">
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-content">
+                        <div class="drop-zone-icon">
+                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <p class="drop-text" data-i18n="dropZone">Drag & drop your image here</p>
+                        <p class="drop-subtext" data-i18n="dropSubtext">or click to browse</p>
+                    </div>
+                    <input type="file" id="imageInput" name="image" accept="image/*" required>
+                </div>
+
+                <div id="previewContainer" class="preview-container hidden">
+                    <img id="imagePreview" src="" alt="Preview">
+                    <button type="button" id="removeImage" class="remove-btn" data-i18n-title="removeImage" title="Remove image">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="settings-panel">
+                    <h2 data-i18n="expirationSettings">Expiration Settings</h2>
+
+                    <div class="setting-group">
+                        <label for="viewLimit" data-i18n="maxViews">Maximum Views</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="viewLimit" min="1" max="1000" value="1" required>
+                            <span class="unit" data-i18n="viewsUnit">views</span>
+                        </div>
+                        <p class="setting-hint" data-i18n="viewHint">Image will be destroyed after this many views</p>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="timerType" data-i18n="timerType">Timer Type</label>
+                        <div class="timer-type-selector">
+                            <button type="button" class="timer-type-btn active" data-type="never" id="timerNever" data-i18n="never">Never</button>
+                            <button type="button" class="timer-type-btn" data-type="countdown" id="timerCountdown" data-i18n="countdown">Countdown</button>
+                        </div>
+                    </div>
+
+                    <div class="setting-group" id="countdownSetting" style="display:none;">
+                        <label for="timerSeconds" data-i18n="timerDuration">Timer Duration</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="timerSeconds" min="1" max="300" value="10" required>
+                            <span class="unit" data-i18n="secondsUnit">seconds</span>
+                        </div>
+                        <p class="setting-hint" data-i18n="timerHint">Image will self-destruct after this time</p>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="passwordProtection" data-i18n="passwordProtection">Password Protection (Optional)</label>
+                        <div class="input-with-unit">
+                            <input type="password" id="passwordProtection" placeholder="Set a password (optional)" class="password-input" data-i18n-placeholder="passwordPlaceholder">
+                        </div>
+                    </div>
+
+                    </div>
+
+                <button type="submit" id="submitBtn" class="submit-btn">
+                    <span class="btn-text" data-i18n="createLink">Create Vanishing Link</span>
+                    <span class="btn-loader hidden">
+                        <svg class="spinner" viewBox="0 0 24 24" width="20" height="20">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"/>
+                        </svg>
+                        <span data-i18n="uploading">Uploading...</span>
+                    </span>
+                </button>
+            </form>
+        </main>
+
+        <div id="resultSection" class="result-section hidden">
+            <div class="result-card">
+                <h2 data-i18n="linkCreated">Link Created</h2>
+                <p class="result-subtitle" data-i18n="resultSubtitle">Share this link. It will vanish on its own.</p>
+                <div class="link-box">
+                    <input type="text" id="shareLink" readonly>
+                    <button id="copyLink" class="copy-btn" data-i18n="copyLink">Copy</button>
+                </div>
+                <div class="result-stats">
+                    <div class="stat">
+                        <span class="stat-label" data-i18n="maxViewsStat">Max Views</span>
+                        <span class="stat-value" id="statViews">-</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label" data-i18n="timerStat">Timer</span>
+                        <span class="stat-value" id="statTimer">-</span>
+                    </div>
+                </div>
+                <button id="newUpload" class="secondary-btn" data-i18n="uploadAnother">Upload Another</button>
+            </div>
+        </div>
+
+        <div id="uploadingOverlay" class="uploading-overlay hidden">
+            <div class="uploading-content">
+                <svg class="spinner large" viewBox="0 0 24 24" width="48" height="48">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"/>
+                </svg>
+                <p data-i18n="uploadingOverlay">Uploading and processing your image...</p>
+                <p id="uploadMethod" class="upload-method-hint" style="font-size:0.8rem;color:#8888aa;margin-top:0.5rem;" data-i18n="uploadMethod">Using image hosting service</p>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p data-i18n="footer">Vanishot © 2025 | Images self-destruct after viewing or timer expiry | Owner: Alice</p>
+    </footer>
+
+    <script src="js/content-protection.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>try{document.documentElement.dataset.theme=localStorage.getItem('vanishot_theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+    <title data-i18n="appTitle">Vanishot - Image Viewing</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/content-protection.js"></script>
+    <script src="js/translations.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/viewer.js" defer></script>
+</head>
+<body class="viewing-body">
+    <!-- Language Selector -->
+    <div class="lang-selector">
+        <button class="lang-btn theme-btn" id="themeBtn" title="Switch to dark mode" aria-label="Toggle dark mode">Dark</button>
+        <button class="lang-btn" id="langBtn" title="Select Language">&#127760; EN</button>
+        <div class="lang-dropdown hidden" id="langDropdown"></div>
+    </div>
+
+    <div id="passwordOverlay" class="password-overlay hidden">
+        <div class="password-card">
+            <div class="logo" style="margin-bottom:0.75rem">
+                <div class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                    </div>
+                <h2 style="font-size:1.3rem">Vanishot</h2>
+            </div>
+            <h3 data-i18n="passwordRequired">Password Required</h3>
+            <p data-i18n="passwordProtected">This image is password protected.</p>
+            <form id="passwordForm">
+                <div class="input-with-unit">
+                    <input type="password" id="passwordInput" placeholder="Enter password" autofocus data-i18n-placeholder="enterPassword">
+                </div>
+                <button type="submit" class="submit-btn" data-i18n="unlock">Unlock</button>
+            </form>
+            <p id="passwordError" class="error-text hidden" data-i18n="incorrectPassword">Incorrect password</p>
+        </div>
+    </div>
+
+    <div id="mainView" class="main-view hidden">
+        <div id="timerBanner" class="timer-banner hidden">
+            <div class="timer-content">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span id="timerDisplay">0s</span>
+                <span id="viewCountDisplay" class="view-count-badge">Views: 0/0</span>
+            </div>
+        </div>
+
+        <div id="burnOverlay" class="burn-overlay hidden">
+            <div class="burn-content">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+                <h2 data-i18n="imageDestroyed">Image Destroyed</h2>
+                <p data-i18n="imageDestroyedText">This image has self-destructed as scheduled.</p>
+                <p class="burn-subtitle" data-i18n="imageDestroyedSubtitle">It is no longer accessible.</p>
+            </div>
+        </div>
+
+        <div id="imageContainer" class="image-container hidden">
+            <div class="image-wrapper" id="imageWrapper">
+                <img id="destroyImage" src="" alt="Vanishing Image" class="destroy-image">
+                <div class="image-overlay" id="imageOverlay"></div>
+                <div class="watermark" id="watermark">Vanishot</div>
+            </div>
+            <div class="image-info-bar">
+                <span id="viewsInfo" data-i18n="viewsRemaining">Views remaining: -</span>
+                <button id="closeView" class="close-view-btn" data-i18n-title="closeView" title="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="errorView" class="error-view hidden">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="15" y1="9" x2="9" y2="15"></line>
+                <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+            <h2 data-i18n="linkExpired">Link Expired or Invalid</h2>
+            <p data-i18n="linkExpiredText">The link has expired, has been destroyed, or is invalid.</p>
+            <a href="index.html" class="secondary-btn" data-i18n="returnToUpload">Return to Upload</a>
+        </div>
+    </div>
+
+    <div class="view-footer">
+        <p data-i18n="viewFooter">Vanishot © 2025 | This image will self-destruct | Owner: Alice</p>
+    </div>
+</body>
+</html>

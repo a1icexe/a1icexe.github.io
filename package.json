@@ -1,0 +1,22 @@
+{
+  "name": "vanishot",
+  "version": "1.0.0",
+  "description": "A self-destructing image sharing platform",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve -l 3000 ."
+  },
+  "keywords": [
+    "vanishot",
+    "self-destructing",
+    "image",
+    "sharing",
+    "privacy"
+  ],
+  "author": "Vanishot",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}
